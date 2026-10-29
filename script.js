@@ -62,7 +62,9 @@ document.getElementById("myDate").innerHTML = now.getMonth()+1 + "/" + now.getDa
 
 // STEP 11: Record the start time using new Date().getTime()
 //          This gives you the current time in milliseconds.
-
+let startTime = Date.now()
+let elapsed = 0;
+let running = true;
 // STEP 12: Create a variable to hold the timer ID (for stopping later).
 //          Use setInterval() with a delay of 10 milliseconds.
 //          Inside the interval function:
@@ -70,7 +72,10 @@ document.getElementById("myDate").innerHTML = now.getMonth()+1 + "/" + now.getDa
 //          b) Calculate elapsed seconds: (currentTime - startTime) / 1000
 //          c) Display the elapsed time using .toFixed(3)
 //             in the element with ID "myTimer"
-
+let timerInterval = setInterval(function() {
+    elapsed = (Date.now() - startTime) / 1000;
+    document.getElementById("myTimer").textContent = elapsed.toFixed(3);
+}, 10);
 
 // ============================================
 //  PART 3: Start/Stop Toggle Button
@@ -84,7 +89,24 @@ document.getElementById("myDate").innerHTML = now.getMonth()+1 + "/" + now.getDa
 
 // STEP 13: Create a variable to track whether the timer is
 //          currently running (let running = true;)
-
+document.getElementById("myBtn").addEventListener("click", function() {
+    let btn = document.getElementById("myBtn");
+    if (running) {
+        clearInterval(timerInterval);
+        elapsed = (Date.now() - startTime)/1000;
+        running = false;
+        btn.textContent = "Start";
+    }
+    else {
+        startTime = Date.now() - elapsed *1000;
+        timerInterval = setInterval(function() {
+    elapsed = (Date.now() - startTime) / 1000;
+    document.getElementById("myTimer").textContent = elapsed.toFixed(3);
+    }, 10);
+    running = true
+    btn.textContent = "Stop";
+    }
+})
 // STEP 14: Add a click event listener to the button (ID "myBtn").
 //          Inside the listener:
 //          a) If running is true:
@@ -96,3 +118,4 @@ document.getElementById("myDate").innerHTML = now.getMonth()+1 + "/" + now.getDa
 //             - Start a new setInterval (same as STEP 12)
 //             - Change button innerHTML to "Stop"
 //             - Set running to true
+
